@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useWeb3 } from "@3rdweb/hooks";
 import { ThirdwebSDK } from "@3rdweb/sdk";
 import { ethers } from "ethers";
+import logo from "./assets/patitasdao.png";
+import twitterLogo from "./assets/twitter-logo.svg";
 
 // We instatiate the sdk on Rinkeby.
 const sdk = new ThirdwebSDK("rinkeby");
@@ -20,6 +22,14 @@ const tokenModule = sdk.getTokenModule(
 const voteModule = sdk.getVoteModule(
   "0x0F4450eA5aF902642284e57Df106D659eC531cdf"
 );
+
+// Constants
+const TWITTER_HANDLE = "_buildspace";
+const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
+const TWITTER_PROFILE = "seba_itokazu";
+const PROFILE_LINK = `https://twitter.com/${TWITTER_PROFILE}`;
+const THIRDWEB_HANDLE = "thirdweb_";
+const THIRDWEB_LINK = `https://twitter.com/${THIRDWEB_HANDLE}`;
 
 const App = () => {
   // Use the connectWallet hook thirdweb gives us.
@@ -174,6 +184,18 @@ const App = () => {
       });
   }, [hasClaimedNFT, proposals, address]);
 
+  if (error && error.name === "UnsupportedChainIdError") {
+    return (
+      <div className="unsupported-network">
+        <h2>Please connect to Rinkeby</h2>
+        <p>
+          This dapp only works on the Rinkeby network, please switch networks in
+          your connected wallet.
+        </p>
+      </div>
+    );
+  }
+
   // This is the case where the user hasn't connected their wallet
   // to your web app. Let them call connectWallet.
   if (!address) {
@@ -191,6 +213,9 @@ const App = () => {
   if (hasClaimedNFT) {
     return (
       <div className="member-page">
+        <div className="logo-container">
+          <img src={logo} alt="PatitasDAO Logo" className="logo"></img>
+        </div>
         <h1>PatitasDAO Homepage</h1>
         <p>Congratulations and thanks for being a member</p>
         <div>
@@ -339,6 +364,31 @@ const App = () => {
               </small>
             </form>
           </div>
+        </div>
+        <div className="footer-container">
+          <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
+          <p className="footer-text"> built on&nbsp;
+          <a
+            className="footer-text"
+            href={TWITTER_LINK}
+            target="_blank"
+            rel="noreferrer"
+          >{`@${TWITTER_HANDLE}`}</a>
+          &nbsp; and  &nbsp;
+          <a
+            className="footer-text"
+            href={THIRDWEB_LINK}
+            target="_blank"
+            rel="noreferrer"
+          >{`@${THIRDWEB_HANDLE}`}</a>
+          &nbsp; by &nbsp;
+          <a
+            className="footer-text"
+            href={PROFILE_LINK}
+            target="_blank"
+            rel="noreferrer"
+          >{`@${TWITTER_PROFILE}`}</a>
+          </p>
         </div>
       </div>
     );
